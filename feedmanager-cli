@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+docker run -i --net podcastapp_db-net --env-file .env -e DB_HOST=postgres_db --rm podcastapp/feedmanager "$@"

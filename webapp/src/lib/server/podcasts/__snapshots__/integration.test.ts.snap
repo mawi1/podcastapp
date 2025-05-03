@@ -1,0 +1,101 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`podcasts > get by id 1`] = `
+{
+  "description": "Podcast The Paranormal Pundits description",
+  "id": 4,
+  "isSubscribed": false,
+  "link": "http://theparanormalpundits.com",
+  "title": "The Paranormal Pundits",
+}
+`;
+
+exports[`podcasts > get by id subscribed 1`] = `
+{
+  "description": "Podcast Murder at the Microphone description",
+  "id": 3,
+  "isSubscribed": true,
+  "link": "http://murderatthemicrophone.com",
+  "title": "Murder at the Microphone",
+}
+`;
+
+exports[`podcasts > get by initial symbol alphabetic 1`] = `
+[
+  {
+    "id": 5,
+    "isSubscribed": false,
+    "latestEpisode": 2024-07-30T15:00:00.040Z,
+    "title": "Tech Tales from the Future",
+  },
+  {
+    "id": 8,
+    "isSubscribed": true,
+    "latestEpisode": 2025-04-09T12:00:00.064Z,
+    "title": "The Historical Haunts",
+  },
+  {
+    "id": 4,
+    "isSubscribed": false,
+    "latestEpisode": 2024-02-21T13:00:00.032Z,
+    "title": "The Paranormal Pundits",
+  },
+  {
+    "id": 1,
+    "isSubscribed": false,
+    "latestEpisode": 2024-02-25T02:00:00.008Z,
+    "title": "The Startup Squad",
+  },
+]
+`;
+
+exports[`podcasts > get by initial symbol numeric 1`] = `
+[
+  {
+    "id": 10,
+    "isSubscribed": true,
+    "latestEpisode": 2024-08-15T22:00:00.080Z,
+    "title": "12 Steps to Success",
+  },
+  {
+    "id": 9,
+    "isSubscribed": false,
+    "latestEpisode": 2024-04-06T21:00:00.072Z,
+    "title": "8-Bit Adventures",
+  },
+]
+`;
+
+exports[`podcasts > get by initial symbol other 1`] = `
+[
+  {
+    "id": 12,
+    "isSubscribed": true,
+    "latestEpisode": 2024-04-13T06:00:00.096Z,
+    "title": "+Positive Vibes",
+  },
+  {
+    "id": 11,
+    "isSubscribed": false,
+    "latestEpisode": 2024-05-13T17:00:00.088Z,
+    "title": "@Tech Talk ",
+  },
+]
+`;
+
+exports[`podcasts > search 1`] = `
+[
+  {
+    "id": 5,
+    "isSubscribed": true,
+    "latestEpisode": 2024-07-30T15:00:00.040Z,
+    "title": "Tech Tales from the Future",
+  },
+  {
+    "id": 11,
+    "isSubscribed": false,
+    "latestEpisode": 2024-05-13T17:00:00.088Z,
+    "title": "@Tech Talk ",
+  },
+]
+`;

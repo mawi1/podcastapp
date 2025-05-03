@@ -1,0 +1,35 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`getPaginationInfo > other search params are keept 1`] = `
+{
+  "links": [
+    {
+      "href": "?page=1&foo=bar",
+      "isActive": false,
+      "page": 1,
+    },
+    {
+      "href": "?page=2&foo=bar",
+      "isActive": false,
+      "page": 2,
+    },
+    {
+      "href": "?page=3&foo=bar",
+      "isActive": true,
+      "page": 3,
+    },
+    {
+      "href": "?page=4&foo=bar",
+      "isActive": false,
+      "page": 4,
+    },
+    {
+      "href": "?page=5&foo=bar",
+      "isActive": false,
+      "page": 5,
+    },
+  ],
+  "next": "?page=4&foo=bar",
+  "previous": "?page=2&foo=bar",
+}
+`;

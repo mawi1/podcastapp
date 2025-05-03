@@ -1,0 +1,46 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`playlist > episodes on playlist 1`] = `
+[
+  {
+    "durationSeconds": 303,
+    "id": 23,
+    "podcast": {
+      "id": 1,
+      "title": "The Startup Squad",
+    },
+    "pubDate": 2024-02-17T07:00:00.008Z,
+    "title": "Podcast (1) Episode #23",
+  },
+  {
+    "durationSeconds": 501,
+    "id": 123,
+    "podcast": {
+      "id": 2,
+      "title": "Love in the Algorithm",
+    },
+    "pubDate": 2024-04-04T01:00:00.016Z,
+    "title": "Podcast (2) Episode #89",
+  },
+  {
+    "durationSeconds": 390,
+    "id": 86,
+    "podcast": {
+      "id": 2,
+      "title": "Love in the Algorithm",
+    },
+    "pubDate": 2024-03-08T20:00:00.016Z,
+    "title": "Podcast (2) Episode #52",
+  },
+  {
+    "durationSeconds": 495,
+    "id": 296,
+    "podcast": {
+      "id": 5,
+      "title": "Tech Tales from the Future",
+    },
+    "pubDate": 2024-04-02T15:00:00.040Z,
+    "title": "Podcast (5) Episode #87",
+  },
+]
+`;

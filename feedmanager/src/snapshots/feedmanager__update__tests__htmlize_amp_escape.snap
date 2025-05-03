@@ -1,0 +1,5 @@
+---
+source: src/update.rs
+expression: html
+---
+"<p>Lorem ipsum dol&amp;or sit amet</p><p>consetetur sadipscing elitr sed</p><p>diam nonumy eirmod tempor invidunt ut labore</p>"

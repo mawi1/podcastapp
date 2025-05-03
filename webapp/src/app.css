@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@layer base {
+  .hyperlink,
+  #content a {
+    text-decoration: underline;
+  }
+
+  .hyperlink:hover,
+  #content a:hover {
+    text-decoration: none;
+  }
+
+  h1 {
+    @apply text-[1.3rem] leading-none min-[689px]:text-3xl;
+  }
+  h2 {
+    @apply text-[1.275rem] leading-none min-[689px]:text-2xl;
+  }
+  h3 {
+    @apply text-[1.1rem] leading-none min-[689px]:text-xl;
+  }
+
+  body {
+    font-family: "Nunito", sans-serif;
+    @apply text-[#383838];
+  }
+
+  button {
+    @apply cursor-pointer;
+  }
+}

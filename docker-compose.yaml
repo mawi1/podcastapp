@@ -1,0 +1,79 @@
+services:
+  webapp:
+    image: podcastapp/webapp
+    build:
+      context: ./webapp
+    restart: unless-stopped
+    environment:
+      DB_HOST: postgres_db
+      DB_USER: ${DB_USER?error}
+      DB_PASSWORD: ${DB_PASSWORD?error}
+      DB_NAME: ${DB_NAME?error}
+      ORIGIN: https://podcastapp.mawi.cc
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    networks:
+      - proxy-net
+      - db-net
+  
+  migrate:
+    image: podcastapp/migrate
+    restart: no
+    build:
+      context: ./webapp
+      dockerfile: migrate.Dockerfile
+    environment:
+      DB_HOST: postgres_db
+      DB_USER: ${DB_USER?error}
+      DB_PASSWORD: ${DB_PASSWORD?error}
+      DB_NAME: ${DB_NAME?error}
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    networks:
+      - db-net
+  
+  update:
+    image: podcastapp/feedmanager
+    restart: unless-stopped
+    build:
+      context: ./feedmanager
+    command: update --schedule 3
+    environment:
+      DB_HOST: postgres_db
+      DB_USER: ${DB_USER?error}
+      DB_PASSWORD: ${DB_PASSWORD?error}
+      DB_NAME: ${DB_NAME?error}
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    networks:
+      - db-net
+    
+  postgres_db:
+    restart: unless-stopped
+    image: postgres:17
+    environment:
+      POSTGRES_USER: ${DB_USER?error}
+      POSTGRES_PASSWORD: ${DB_PASSWORD?error}
+      POSTGRES_DB: ${DB_NAME?error}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 127.0.0.1:5432:5432
+    networks:
+      - db-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+
+networks:
+  db-net:
+  proxy-net:
+    external: true

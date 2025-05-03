@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`playlist > subscribed podcasts 1`] = `
+[
+  {
+    "id": 9,
+    "latestEpisode": 2024-04-06T21:00:00.072Z,
+    "title": "8-Bit Adventures",
+  },
+  {
+    "id": 12,
+    "latestEpisode": 2024-04-13T06:00:00.096Z,
+    "title": "+Positive Vibes",
+  },
+  {
+    "id": 4,
+    "latestEpisode": 2024-02-21T13:00:00.032Z,
+    "title": "The Paranormal Pundits",
+  },
+  {
+    "id": 1,
+    "latestEpisode": 2024-02-25T02:00:00.008Z,
+    "title": "The Startup Squad",
+  },
+]
+`;
