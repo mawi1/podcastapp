@@ -8,7 +8,7 @@ push_schema:
 	npx drizzle-kit push
 
 generate_migration:
-	npx drizzle-kit push
+	npx drizzle-kit generate
 
 migrate:
 	npx drizzle-kit migrate
