@@ -1,6 +1,7 @@
 import {
   boolean,
   customType,
+  doublePrecision,
   integer,
   pgTable,
   primaryKey,
@@ -90,4 +91,19 @@ export const playlist = pgTable(
     primaryKey({ columns: [t.userId, t.episodeId] }),
     unique("playlist__user_id__position__unique").on(t.userId, t.position),
   ]
+);
+
+export const resumeData = pgTable(
+  "resume_data",
+  {
+    userId: integer("user_id")
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    episodeId: integer("episode_id")
+      .notNull()
+      .references(() => episode.id, { onDelete: "cascade" }),
+    currentTime: doublePrecision("current_time").notNull(),
+    playbackRate: doublePrecision("playback_rate").notNull(),
+  },
+  (t) => [primaryKey({ columns: [t.userId, t.episodeId] })]
 );

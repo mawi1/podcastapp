@@ -18,6 +18,11 @@ export type EpisodeBaseData = {
   durationSeconds: number | null;
 };
 
+export type ResumeData = {
+  currentTime: number,
+  playbackRate: number,
+}
+
 export type PaginatedList<T> = {
   items: T[];
   totalItems: number;

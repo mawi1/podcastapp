@@ -1,10 +1,10 @@
-import { count, desc, eq, sql } from "drizzle-orm";
+import { and, count, desc, eq, sql } from "drizzle-orm";
 
 import { PAGE_SIZE } from "$lib/components/Paginator";
-import type { EpisodeBaseData, Id, PageNo, PaginatedList, PodcastRef } from "$lib/models";
+import type { EpisodeBaseData, Id, PageNo, PaginatedList, PodcastRef, ResumeData } from "$lib/models";
 
 import db from "../db";
-import { episode, podcast } from "../schema";
+import { episode, podcast, resumeData as resumeDataTable } from "../schema";
 import { userPlaylistSubquery } from "../subqueries";
 
 export type EpisodeListItemData = EpisodeBaseData & {
@@ -45,6 +45,7 @@ export type EpisodeDetails = EpisodeBaseData & {
   audioUrl: string | null;
   isOnPlaylist: boolean;
   podcast: PodcastRef;
+  resumeData: ResumeData | null ;
 };
 
 export async function getEpisodeById(userId: number, id: Id): Promise<EpisodeDetails | undefined> {
@@ -60,14 +61,26 @@ export async function getEpisodeById(userId: number, id: Id): Promise<EpisodeDet
       isOnPlaylist: sql<boolean>`${subQuery.episodeId} is NOT NULL`,
       podcastId: podcast.id,
       podcastTitle: podcast.title,
+      currentTime: resumeDataTable.currentTime,
+      playbackRate: resumeDataTable.playbackRate,
     })
     .from(episode)
     .innerJoin(podcast, eq(episode.podcastId, podcast.id))
     .leftJoin(subQuery, eq(episode.id, subQuery.episodeId))
+    .leftJoin(resumeDataTable, and(eq(resumeDataTable.episodeId, episode.id), eq(resumeDataTable.userId, userId)))
     .where(eq(episode.id, id.id));
   if (episodeDb.length === 0) {
     return undefined;
   } else {
+    let resumeData;
+    if (episodeDb[0].currentTime !== null && episodeDb[0].playbackRate !== null) {
+      resumeData = {
+        currentTime: episodeDb[0].currentTime,
+        playbackRate: episodeDb[0].playbackRate,
+      };
+    } else {
+      resumeData = null;
+    }
     return {
       id: episodeDb[0].id,
       title: episodeDb[0].title,
@@ -80,6 +93,7 @@ export async function getEpisodeById(userId: number, id: Id): Promise<EpisodeDet
         id: episodeDb[0].podcastId,
         title: episodeDb[0].podcastTitle,
       },
+      resumeData,
     };
   }
 }

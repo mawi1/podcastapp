@@ -12,6 +12,7 @@ exports[`episodes > by id 1`] = `
     "title": "Tech Tales from the Future",
   },
   "pubDate": 2024-05-05T22:00:00.040Z,
+  "resumeData": null,
   "title": "Podcast (5) Episode #134",
 }
 `;
@@ -28,7 +29,28 @@ exports[`episodes > by id, on playlist 1`] = `
     "title": "Tech Tales from the Future",
   },
   "pubDate": 2024-05-05T22:00:00.040Z,
+  "resumeData": null,
   "title": "Podcast (5) Episode #134",
+}
+`;
+
+exports[`episodes > by id, with resume data 1`] = `
+{
+  "audioUrl": "http://podcastapp.mawi.cc/podcast/2/94/audio.mp3",
+  "content": "<p>Content \${title}</p>",
+  "durationSeconds": 516,
+  "id": 128,
+  "isOnPlaylist": false,
+  "podcast": {
+    "id": 2,
+    "title": "Love in the Algorithm",
+  },
+  "pubDate": 2024-04-07T14:00:00.016Z,
+  "resumeData": {
+    "currentTime": 789.953,
+    "playbackRate": 1.5,
+  },
+  "title": "Podcast (2) Episode #94",
 }
 `;
 

@@ -27,6 +27,18 @@ describe("episodes", () => {
     expect(e).toMatchSnapshot();
   });
 
+  dbTest("by id, with resume data", async ({ db }) => {
+    const { getEpisodeById } = await import(".");
+    const { setResumeData } = await import("../resume-data");
+
+    await insertTestUser(db);
+    await insertTestPodcasts(db);
+    await setResumeData(1, 128, {currentTime: 789.953, playbackRate: 1.5});
+
+    const e = await getEpisodeById(1, Id.fromStr("128")._unsafeUnwrap());
+    expect(e).toMatchSnapshot();
+  });
+
   dbTest.for([
     {
       searchParams: "?page=1",

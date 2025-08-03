@@ -6,7 +6,7 @@
   import { PlayerState } from "./Player.svelte";
 
   type Props = {
-    currentTime?: number;
+    currentTime: number;
     duration?: number;
     playerState: PlayerState;
   };
@@ -32,7 +32,6 @@
 
   $effect(() => {
     if (
-      currentTime !== undefined &&
       duration !== undefined &&
       !isNaN(duration) &&
       width !== undefined &&
@@ -114,6 +113,7 @@
     bind:this={thumbElement}
     class="absolute top-1 left-0 size-[1.125rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-600 touch-none"
     style={`left: ${thumbPosition}px`}
+    class:hidden={duration === undefined || isNaN(duration)}
     onpointerdown={startDragging}
     onpointerup={stopDragging}
     onpointercancel={stopDragging}

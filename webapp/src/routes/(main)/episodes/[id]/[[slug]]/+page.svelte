@@ -45,7 +45,7 @@
   </PageXMargin>
 
   {#if episodeDetails.audioUrl}
-    <Player audioUrl={episodeDetails.audioUrl} {autoplay} />
+    <Player episodeId={episodeDetails.id} audioUrl={episodeDetails.audioUrl} {autoplay} resumeData={episodeDetails.resumeData} />
     <PageXMargin>
       <div class="my-3 flex justify-end">
         <PlaylistButton

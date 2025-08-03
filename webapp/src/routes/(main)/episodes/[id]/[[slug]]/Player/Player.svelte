@@ -11,13 +11,23 @@
 <script lang="ts">
   import { onMount } from "svelte";
 
+  import { beforeNavigate } from "$app/navigation";
+
   import Error from "$lib/components/Error.svelte";
   import { formatTime } from "$lib/datetime";
+  import type { ResumeData } from "$lib/models";
+  import { trpc } from "$lib/trpc/client";
 
   import ProgressBar from "./ProgressBar.svelte";
   import ResponsiveRangeInput from "./ResponsiveRangeInput/ResponsiveRangeInput.svelte";
 
-  let { audioUrl, autoplay }: { audioUrl: string; autoplay?: boolean } = $props();
+  let {
+    audioUrl,
+    autoplay,
+    episodeId,
+    resumeData,
+  }: { audioUrl: string; autoplay?: boolean; episodeId: number; resumeData: ResumeData | null } =
+    $props();
 
   let audio: HTMLAudioElement;
 
@@ -27,38 +37,54 @@
   let duration: undefined | number = $state(undefined);
   let durationDisplay: string = $derived(duration !== undefined ? formatTime(duration) : "--:--");
 
-  let currentTime: undefined | number = $state(undefined);
-  let currentTimeDisplay: undefined | string = $derived(
-    currentTime !== undefined && duration !== undefined && !isNaN(duration)
-      ? formatTime(currentTime, duration >= 3600)
-      : "--:--"
+  let currentTime: number = $state(resumeData !== null ? resumeData.currentTime : 0);
+  let currentTimeDisplay: string = $derived(
+    duration !== undefined && !isNaN(duration) ? formatTime(currentTime, duration >= 3600) : "--:--"
   );
 
-  let playbackRate = $state(1);
-  let volume = $state(0.5);
+  let playbackRate = $state(resumeData !== null ? resumeData.playbackRate : 1);
+  let volume = $state(parseFloat(localStorage.getItem("volume") || "0.5"));
+
+  let cachedEpisodeId: number;
 
   onMount(() => {
+    cachedEpisodeId = episodeId;
+
     audio.addEventListener("error", () => {
       playerState = PlayerState.Error;
     });
     audio.addEventListener("canplay", async () => {
-      if (playerState === PlayerState.Loading) {
-        if (autoplay) {
-          await audio.play();
-        }
-      }
       playerState = PlayerState.CanPlay;
     });
     audio.addEventListener("seeking", () => {
       playerState = PlayerState.Seeking;
     });
+  });
 
-    volume = parseFloat(localStorage.getItem("volume") || "0.5");
-    audio.src = audioUrl;
+  beforeNavigate((navigation) => {
+    if (navigation.willUnload && !audio.paused) {
+      trpc().setResumeData.mutate({ episodeId: cachedEpisodeId, currentTime, playbackRate });
+    }
   });
 </script>
 
-<audio bind:this={audio} bind:duration bind:currentTime bind:playbackRate bind:volume bind:paused
+<audio
+  bind:this={audio}
+  bind:duration
+  bind:currentTime
+  bind:playbackRate
+  bind:volume
+  bind:paused
+  src={audioUrl}
+  {autoplay}
+  onpause={() => {
+    if (currentTime > 0 && duration !== undefined && currentTime < duration) {
+      trpc().setResumeData.mutate({ episodeId: cachedEpisodeId, currentTime, playbackRate });
+    }
+  }}
+  onended={() => {
+    trpc().deleteResumeData.mutate({ episodeId: cachedEpisodeId });
+  }}
 ></audio>
 
 {#if playerState === PlayerState.Error}
