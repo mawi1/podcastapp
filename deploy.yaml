@@ -1,0 +1,61 @@
+- name: Build and push webapp
+  ansible.builtin.import_playbook: build_and_push.yaml
+  vars:
+    image_name: podcastapp/webapp
+    path: webapp
+    archive: webapp.tar
+  tags: webapp
+
+- name: Build and push migrate
+  ansible.builtin.import_playbook: build_and_push.yaml
+  vars:
+    image_name: podcastapp/migrate
+    dockerfile: migrate.Dockerfile 
+    path: webapp
+    archive: migrate.tar
+  tags: migrate
+
+- name: Build and push feedmanager
+  ansible.builtin.import_playbook: build_and_push.yaml
+  vars:
+    image_name: podcastapp/feedmanager
+    path: feedmanager
+    archive: feedmanager.tar
+  tags: feedmanager
+
+- hosts: all
+  become: true
+  tasks:
+    - name: Create dest dir
+      ansible.builtin.file:
+        path: "{{ dest_dir }}"
+        state: directory
+        mode: '0755'
+      become: false
+    - name: Copy files
+      copy:
+        src: "{{ item }}"
+        dest: "{{ dest_dir }}/{{ item }}"
+      become: false
+      loop:
+        - docker-compose.yaml
+        - feedmanager-cli
+    - name: Copy env file
+      copy:
+        src: .env.production
+        dest: "{{ dest_dir }}/.env"
+        owner: root
+        group: root
+        mode: "400"
+    - name: Docker compose down
+      community.docker.docker_compose_v2:
+        project_src: "{{ dest_dir }}"
+        state: absent
+    - name: Docker compose up
+      community.docker.docker_compose_v2:
+        project_src: "{{ dest_dir }}"
+        state: present
+    - name: Prune
+      community.docker.docker_prune:
+        images: true
+

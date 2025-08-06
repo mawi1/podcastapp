@@ -1,0 +1,30 @@
+- hosts: localhost
+  tasks:
+    - name: Build image
+      community.docker.docker_image:
+        name: "{{ image_name }}"
+        build:
+          dockerfile: "{{ dockerfile | default('Dockerfile') }}"
+          path: "{{ path }}"
+          pull: true
+        source: build
+        force_source: true
+        debug: true
+        archive_path: "{{ archive }}" 
+
+- hosts: all
+  become: true
+  vars:
+    archive_path: "/tmp/{{ archive }}" 
+  tasks:
+    - name: Copy archive to remote server
+      ansible.builtin.copy:
+        src: "{{ archive }}"
+        dest: "{{ archive_path }}"
+    - name: Load image
+      community.docker.docker_image_load:
+        path: "{{ archive_path }}"
+    - name: Delete archive 
+      ansible.builtin.file:
+        path: "{{ archive_path }}"
+        state: absent
